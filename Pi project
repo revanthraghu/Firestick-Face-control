@@ -1,0 +1,52 @@
+Pi Zero W with camera project
+
+Pi IP address = 192.168.1.183 (might change, need to set static ip)
+FireTV IP address = 192.168.1.220 (might change, need to set static ip)
+ssh password = November@24
+
+Using mjpg-streamer to stream video over the network using http (u4vl is better but doesnt supoort raspbian buster yet). Go to browser and enter http://192.168.1.183:8080/stream.html (Bookmarked tutorial in RpiCar, mjpg-streamer already installed)
+
+pip3 install tensorflow==1.13.1
+pip3 install opencv-python==3.4.6.27
+sudo apt-get install android-tools-adb android-tools-fastboot #installs adb and fastboot
+
+A pi connected to firestick through adb checks if any person is facing/watching the tv using a pi camera running front face detection code, if no face is detected (no one is watching tv) the pi sends an adb shell command to pause the firestick and if face is detected again send adb command again to play the firesick media. Check every 30 minutes if tv screen is on and firestick is unlocked (use mWakefullness and mHoldingWakeLockSuspendBlocker) 
+
+
+    Screen OFF and Locked = mWakefulness=Asleep & mHoldingWakeLockSuspendBlocker=false
+
+    Screen ON and Locked = mWakefulness=Awake & mHoldingWakeLockSuspendBlocker=false
+
+    Screen ON and Unlocked = mWakefulness=Awake & mHoldingWakeLockSuspendBlocker=true
+
+check if screen on and unlocked status:
+import subprocess, re
+status_on= re.search(r'mWakefulness=Awake',subprocess.check_output(['adb','shell','dumpsys','power']))
+status_unlocked = re.search(r'mHoldingWakeLockSuspendBlocker=true',subprocess.check_output(['adb','shell','dumpsys','power']))
+if status_on and status_unlocked:
+    #continue face recognition code
+    
+    
+    UP
+    adb shell input keyevent 19
+    DOWN
+    adb shell input keyevent 20
+    LEFT
+    adb shell input keyevent 21
+    RIGHT
+    adb shell input keyevent 22
+    ENTER
+    adb shell input keyevent 66
+    BACK
+    adb shell input keyevent 4
+    HOME
+    adb shell input keyevent 3
+    MENU
+    adb shell input keyevent 1
+    MEDIA PLAY/PAUSE
+    adb shell input keyevent 85
+    MEDIA PREVIOUS
+    adb shell input keyevent 88
+    MEDIA NEXT
+    adb shell input keyevent 87    
+    
