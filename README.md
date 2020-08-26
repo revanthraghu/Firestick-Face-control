@@ -1,4 +1,4 @@
-# Firestick-Face-control
+# Firestick face control
 This python project makes use of facial recognition algorithm to detect if a person is not watching media playing on the firestick and sends commands to the firestick over adb to pause the media. 
 <br/>
 <br/>
